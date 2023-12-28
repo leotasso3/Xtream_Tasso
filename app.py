@@ -2,6 +2,10 @@ import json
 import pickle
 from flask import Flask,request,app,jsonify,url_for,render_template
 import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+
 
 app=Flask(__name__)
 ## Load the model
@@ -15,18 +19,18 @@ def home():
 # Endpoint per le predizioni
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
+
     input_data = [x for x in request.form.values()] 
-    print(input_data)
 
     input_data_processed = pd.DataFrame([input_data]) 
-    #input_data_processed = input_data_processed.drop(['city', 'target', 'enrollee_id'], axis=1)
 
     input_data_processed = pd.get_dummies(input_data_processed)
 
-    numeric_columns = [col for col in input_data_processed.columns if input_data_processed[col].dtype in ['int64', 'float64']]
-    imputer = SimpleImputer(strategy='mean')
-    input_data_processed[numeric_columns] = imputer.fit_transform(input_data_processed[numeric_columns])
-
+    numeric_columns = []
+    for col in input_data_processed:
+        if input_data_processed[col].dtype in ['int64', 'float64']:
+            numeric_columns.append(col)
+    
     prediction = model.predict(input_data_processed) 
 
     return render_template('web_app.html', prediction_text=f"Prediction: {prediction}")
