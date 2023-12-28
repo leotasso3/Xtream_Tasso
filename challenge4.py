@@ -43,7 +43,7 @@ def evaluate(y_pred, y_validation):
 ### The pipeline contains the following steps:
 ### - dataset split: this is done mainly for showing the user how the model is generalizing on new data
 ### - dummy coding the catogorical variables
-### - replacing any eventual 'na' value for the continuos variables 
+### - replacing any eventual 'na' value for the continuos variables with imputation
 ### - training the Decision tree classifier (with optimized HP) on the new dataset (training set, which is going to be 80% of the total)
 ### - evalation of the generalization capabilities of the model on out-of-sample data (test set, 20% of the total)
 ### The function returns the trained model. The user can decide to save it and load it back for any future uses.
@@ -86,8 +86,6 @@ def train_model(data): #The data needs to be a pandas dataset
     # Train the model
     pipeline.fit(X_train, y_train)
 
-
-
     ## MODEL EVALUATION
     print("Model evaluation:\n")
 
@@ -99,12 +97,24 @@ def train_model(data): #The data needs to be a pandas dataset
     print("Classification Report:\n\n")
     evaluate(y_test, y_pred)
 
-    return pipeline
+    
+
+    #Till this point, the function returns a trained pipeline capable of predicting on data from a set of employees.
+    #In addition, I will provide in the output of this function a trained model capable of predicting the target variable
+    #for a single employee. 
+    #The 'standard' pipeline couldn't work for a simple employee, as you can't do imputation for 'na' values if you don't
+    #have a set of other rows to impute the data from. Further explanations are given in 'challenge5'.
+
+    one_row_model = DecisionTreeClassifier(criterion='entropy', max_depth=15, min_samples_split=40)
+    one_row_model.fit(X_train, y_train)
+
+
+    return pipeline, one_row_model
 
 
 
 # Testing the code
 df = pd.read_csv("https://raw.githubusercontent.com/leotasso3/Xtream_Tasso/main/datasets/employee-churn/churn.csv")  
-model = train_model(df)
+model, one_row_model = train_model(df)
 
-print(model)
+
