@@ -18,6 +18,8 @@
 
      <!-- Main Input For Receiving Query to our ML -->
      <form action="{{ url_for('predict')}}" method="post">
+        <input type="text" name="enrollee_id" placeholder="enrollee_id Hours" required="required" /><br>
+        <input type="text" name="city" placeholder="city" required="required" /><br>
         <input type="text" name="city" placeholder="City" required="required" /><br>
         <input type="text" name="city_development_index" placeholder="City Development Index" required="required" /><br>
         <input type="text" name="gender" placeholder="Gender" required="required" /><br>
@@ -30,6 +32,7 @@
         <input type="text" name="company_type" placeholder="Company Type" required="required" /><br>
         <input type="text" name="last_new_job" placeholder="Last New Job" required="required" /><br>
         <input type="text" name="training_hours" placeholder="Training Hours" required="required" /><br>
+        
       </form>
 
        
@@ -37,9 +40,12 @@
         <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
     </form>
 
-    <br>
-    <br>
-  </div>
-  {{prediction_text}}
+   <br>
+   <br>
+  
+   
+ </div>
+ {{prediction_text}}
+
 </body>
 </html>
