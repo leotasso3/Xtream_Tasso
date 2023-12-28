@@ -13,7 +13,7 @@ def home():
 
 
 # Endpoint per le predizioni
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET', 'POST'])
 def predict():
     input_data = request.form.to_dict()  
 
