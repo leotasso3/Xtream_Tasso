@@ -1,35 +1,36 @@
 import json
 import pickle
-
 from flask import Flask,request,app,jsonify,url_for,render_template
-import numpy as np
 import pandas as pd
 
 app=Flask(__name__)
 ## Load the model
 model=pickle.load(open('/Users/leo/Xtream_repo/Xtream_Tasso/decision_tree.pkl','rb'))
+# Homepage
 @app.route('/')
 def home():
     return render_template('web_app_rest.html')
 
-@app.route('/predict_api',methods=['POST'])
-def predict_api():
-    data=request.json['data']
-    print(data)
-    output=model.predict(data)
-    print(output[0])
-    return jsonify(output[0])
 
-@app.route('/predict',methods=['POST'])
+# Endpoint per le predizioni
+@app.route('/predict', methods=['POST'])
 def predict():
-    data=[x for x in request.form.values()]
-    data = pd.get_dummies(data)
-    output=model.predict(data)[0]
-    return render_template("web_app_rest.html",prediction_text="The House price prediction is {}".format(output))
+    input_data = request.form.to_dict()  
 
 
+    input_data_processed = pd.DataFrame([input_data]) 
+    input_data_processed = input_data_processed.drop(['city', 'target', 'enrollee_id'], axis=1)
 
-if __name__=="__main__":
+    input_data_processed = pd.get_dummies(input_data_processed)
+
+    numeric_columns = [col for col in input_data_processed.columns if input_data_processed[col].dtype in ['int64', 'float64']]
+    imputer = SimpleImputer(strategy='mean')
+    input_data_processed[numeric_columns] = imputer.fit_transform(input_data_processed[numeric_columns])
+
+    prediction = model.predict(input_data_processed) 
+
+    return render_template('web_app_rest.html', prediction_text=f"Prediction: {prediction}")
+
+
+if __name__ == "__main__":
     app.run(debug=True)
-   
-     
