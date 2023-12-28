@@ -25,11 +25,6 @@ def predict():
     input_data_processed = pd.DataFrame([input_data]) 
 
     input_data_processed = pd.get_dummies(input_data_processed)
-
-    numeric_columns = []
-    for col in input_data_processed:
-        if input_data_processed[col].dtype in ['int64', 'float64']:
-            numeric_columns.append(col)
     
     prediction = model.predict(input_data_processed) 
 
