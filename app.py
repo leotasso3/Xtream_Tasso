@@ -9,7 +9,7 @@ model=pickle.load(open('/Users/leo/Xtream_repo/Xtream_Tasso/decision_tree.pkl','
 # Homepage
 @app.route('/')
 def home():
-    return render_template('web_app_rest.html')
+    return render_template('web_app.html')
 
 
 # Endpoint per le predizioni
@@ -29,7 +29,7 @@ def predict():
 
     prediction = model.predict(input_data_processed) 
 
-    return render_template('web_app_rest.html', prediction_text=f"Prediction: {prediction}")
+    return render_template('web_app.html', prediction_text=f"Prediction: {prediction}")
 
 
 if __name__ == "__main__":
