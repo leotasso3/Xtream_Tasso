@@ -16,7 +16,7 @@ def home():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
     input_data = request.form.to_dict()  
-
+    print(input_data)
 
     input_data_processed = pd.DataFrame([input_data]) 
     #input_data_processed = input_data_processed.drop(['city', 'target', 'enrollee_id'], axis=1)
