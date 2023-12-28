@@ -8,7 +8,8 @@ from sklearn.compose import ColumnTransformer
 
 
 app=Flask(__name__)
-
+## Load the model
+model=pickle.load(open('/Users/leo/Xtream_repo/Xtream_Tasso/one_row_DT.pkl','rb'))
 # Homepage
 @app.route('/')
 def home():
@@ -17,6 +18,7 @@ def home():
 
 # Endpoint per le predizioni
 @app.route('/predict', methods=['GET', 'POST'])
+
 def predict():
 
     input_data = [x for x in request.form.values()] 
@@ -25,8 +27,6 @@ def predict():
 
     input_data_processed = pd.get_dummies(input_data_processed)
 
-    model = DecisionTreeClassifier(criterion='entropy', max_depth=15, min_samples_split=40)
-    
     prediction = model.predict(input_data_processed) 
 
     return render_template('web_app.html', prediction_text=f"Prediction: {prediction}")
