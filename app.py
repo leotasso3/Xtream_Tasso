@@ -21,13 +21,13 @@ def home():
 
 def predict():
 
+    columns = ['city_development_index', 'gender', 'relevent_experience', 'enrolled_university', 'education_level', 'major_discipline', 'experience', 'company_size', 'company_type', 'last_new_job', 'training_hours']
+
     input_data = [x for x in request.form.values()] 
 
-    input_data_processed = pd.DataFrame([input_data]) 
+    dataset = pd.DataFrame(input_data, columns = columns) 
 
-    print(input_data_processed)
-
-    input_data_processed = pd.get_dummies(input_data_processed)
+    input_data_processed = pd.get_dummies(dataset)
 
     prediction = model.predict(input_data_processed) 
 
