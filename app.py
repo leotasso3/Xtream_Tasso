@@ -15,7 +15,7 @@ def home():
 # Endpoint per le predizioni
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
-    input_data = request.form.to_dict()  
+    input_data = [x for x in request.form.values()] 
     print(input_data)
 
     input_data_processed = pd.DataFrame([input_data]) 
