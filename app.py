@@ -25,6 +25,8 @@ def predict():
 
     input_data_processed = pd.DataFrame([input_data]) 
 
+    print(input_data_processed)
+
     input_data_processed = pd.get_dummies(input_data_processed)
 
     prediction = model.predict(input_data_processed) 
