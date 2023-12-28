@@ -19,7 +19,7 @@ def predict():
 
 
     input_data_processed = pd.DataFrame([input_data]) 
-    input_data_processed = input_data_processed.drop(['city', 'target', 'enrollee_id'], axis=1)
+    #input_data_processed = input_data_processed.drop(['city', 'target', 'enrollee_id'], axis=1)
 
     input_data_processed = pd.get_dummies(input_data_processed)
 
@@ -33,4 +33,6 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
+
+
