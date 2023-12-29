@@ -17,15 +17,16 @@ model = pickle.load(open('/Users/leo/Xtream_repo/Xtream_Tasso/one_row_DT.pkl', '
 def home():
     return render_template('web_app.html')
 
-# Endpoint for predictions
-@app.route('/predict', methods=['POST'])
+# Endpoint for predictions: the POST method allows the user to send an HTTP request (the prediction) to the server throught the html form
+@app.route('/predict', methods=['POST']) #Setting the url of the endpoint '/predict'
 def predict():
-    # List of all columns in the dataset
+
+    # List of all the columns from the dataset on which the DT has been trained (already dummy coded)
     all_cols = ['city_development_index','training_hours','gender_Female', 'gender_Male', 'gender_Other', 'relevent_experience_Has relevent experience', 'relevent_experience_No relevent experience', 'enrolled_university_Full time course', 'enrolled_university_Part time course', 'enrolled_university_no_enrollment', 'education_level_Graduate', 'education_level_High School', 'education_level_Masters', 'education_level_Phd', 'education_level_Primary School', 'major_discipline_Arts', 'major_discipline_Business Degree', 'major_discipline_Humanities', 'major_discipline_No Major', 'major_discipline_Other', 'major_discipline_STEM', 'experience_1', 'experience_10', 'experience_11', 'experience_12', 'experience_13', 'experience_14', 'experience_15', 'experience_16', 'experience_17', 'experience_18', 'experience_19', 'experience_2', 'experience_20', 'experience_3', 'experience_4', 'experience_5', 'experience_6', 'experience_7', 'experience_8', 'experience_9', 'experience_<1', 'experience_>20', 'company_size_10/49', 'company_size_100-500', 'company_size_1000-4999', 'company_size_10000+', 'company_size_50-99', 'company_size_500-999', 'company_size_5000-9999', 'company_size_<10', 'company_type_Early Stage Startup', 'company_type_Funded Startup', 'company_type_NGO', 'company_type_Other', 'company_type_Public Sector', 'company_type_Pvt Ltd', 'last_new_job_1', 'last_new_job_2', 'last_new_job_3', 'last_new_job_4', 'last_new_job_>4', 'last_new_job_never']
 
-    # Extract input data from the form and convert it into a list
-    input_data = [[x for x in request.form.values()]] 
-    input_data_list = input_data[0]
+    # Store the input data sent by the user in the HTML page
+    input_data = [[x for x in request.form.values()]] # This 'double squared parenthesis' is necessary for creating the pandas dataset
+    input_data_list = input_data[0] #this further list is created for an easier iteration through the values 
 
     # Dictionary to hold input categorical columns and their values
     input_categorical_cols = {
@@ -40,25 +41,29 @@ def predict():
         'last_new_job': input_data_list[10]
     }
 
-    # Create an empty DataFrame with all_cols as columns
+    # Create an empty DataFrame with all the columns 
     df = pd.DataFrame(columns=all_cols)
 
-    # Set values in DataFrame based on input categorical columns
-    display_pred = ''
+    display_pred = '' # Defining the variable which will store the output of the model
+                      # I have defined it here for eventually storing an error message if the user inserts non valid values in the form
 
+
+    # Set values in the DataFrame based on input categorical columns
+    # Here I set 1 in the dummy coded columns according to the input given by the user
+    # If a non valid value is given, of the course the related dummy column doesn't exist: therefore I store in the output an error message
     for key in input_categorical_cols:
         dummy_col = f"{key}_{input_categorical_cols[key]}"
         if dummy_col in all_cols:
-            df[dummy_col] = [1]
+            df[dummy_col] = [1] 
         else:   
-            display_pred = f"The value for {key} is not valid"
+            display_pred = f"Error: The value for {key} is not valid"
 
-    # Set other columns in the DataFrame to 0 or 1 based on conditions
+    # Set other dummy columns in the DataFrame to 0
     for col in df:
         if df[col][0] != 1:
             df.loc[0, col] = 0
 
-    # Assign specific values to 'city_development_index' and 'training_hours' columns in DataFrame
+    # Assigning the 2 numerical values to the non-categorical columns
     df.loc[0, 'city_development_index'] = input_data_list[0]
     df.loc[0, 'training_hours'] = input_data_list[1]
 
@@ -74,6 +79,7 @@ def predict():
 
     # Render web_app.html template and pass the prediction text to be displayed
     return render_template('web_app.html', prediction_text=display_pred)
+
 
 # Run the Flask app
 if __name__ == "__main__":
