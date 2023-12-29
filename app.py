@@ -66,10 +66,11 @@ def predict():
     pred = model.predict(df)
 
     # Prepare the display prediction text based on the prediction result
-    if pred[0] == 0:
-        display_pred = 'Loyal employee'
-    else:
-        display_pred = 'Non-loyal employee'
+    if display_pred == '':
+        if pred[0] == 0:
+            display_pred = 'Loyal employee'
+        else:
+            display_pred = 'Non-loyal employee'
 
     # Render web_app.html template and pass the prediction text to be displayed
     return render_template('web_app.html', prediction_text=display_pred)
