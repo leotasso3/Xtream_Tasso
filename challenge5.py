@@ -6,6 +6,18 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
+
+
+# I have created a rest API with the flask python library, together with a simple HTML page which allows the user to 
+# provide in input the values for an employee
+# First, the model trained on the dataset is loaded. Then, as the model has been trained on a dummy coded dataset,
+# I had to reproduce a dataset with the same dummy coded columns.
+# Of course, the user won't be asket to fill all the 63 columns, he will just fill the values for the original (non coded)
+# columns. 
+# The dummy coded dataset is filled with 1 and 0 values according to the input categorical values given by the user.
+# At the end, also the numerical columns are filled.
+# The prediction will then be displayed once that the user presses the 'Predict' button
+
 # Initialize Flask app
 app = Flask(__name__)
 
