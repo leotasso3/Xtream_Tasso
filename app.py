@@ -44,12 +44,14 @@ def predict():
     df = pd.DataFrame(columns=all_cols)
 
     # Set values in DataFrame based on input categorical columns
+    display_pred = ''
+
     for key in input_categorical_cols:
         dummy_col = f"{key}_{input_categorical_cols[key]}"
         if dummy_col in all_cols:
             df[dummy_col] = [1]
         else:   
-            print(f"The value for {key} is not valid")
+            display_pred = f"The value for {key} is not valid"
 
     # Set other columns in the DataFrame to 0 or 1 based on conditions
     for col in df:
@@ -64,7 +66,6 @@ def predict():
     pred = model.predict(df)
 
     # Prepare the display prediction text based on the prediction result
-    display_pred = ''
     if pred[0] == 0:
         display_pred = 'Loyal employee'
     else:
