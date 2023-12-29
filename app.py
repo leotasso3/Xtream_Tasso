@@ -40,7 +40,7 @@ def predict():
     df = pd.DataFrame(columns=all_cols)
 
     for key in input_categorical_cols:
-    dummy_col = f"{key}_{input_categorical_cols[key]}"
+        dummy_col = f"{key}_{input_categorical_cols[key]}"
     if dummy_col in df.columns.tolist():
         df[dummy_col] = [1]
     else:   
