@@ -47,8 +47,8 @@ def predict():
         print(f"The value for {key} is not valid")
 
     for col in df:
-    if df[col][0] != 1:
-        df.loc[0, col] = 0
+        if df[col][0] != 1:
+            df.loc[0, col] = 0
 
     df.loc[0, 'city_development_index'] = input_data_list[0]
     df.loc[0, 'training_hours'] = input_data_list[1]
